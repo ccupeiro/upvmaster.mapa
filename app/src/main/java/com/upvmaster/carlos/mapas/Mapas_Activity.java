@@ -1,11 +1,15 @@
 package com.upvmaster.carlos.mapas;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -46,33 +50,18 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
             }
         });
 
-        LocationManager locationManager = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location location = locationManager.getLastKnownLocation(locationManager
-                    .getBestProvider(criteria, false));
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            posicion = new LatLng(latitude,longitude);
-        }else{
-            posicion = MADRID;
-        }
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(false);
             mMap.getUiSettings().setCompassEnabled(true);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getPos(), 15));
-            mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));
-            animateCamera();
+            new LocalizacionTask().execute();
         }
 
     }
@@ -90,4 +79,70 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
         if (mMap.getMyLocation() != null)
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()), 15));
     }
+
+
+    private class LocalizacionTask extends AsyncTask<Void,Void,Void>{
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(vista.getContext());
+            pd.setMessage(getString(R.string.pd_message));
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            LocationManager locationManager = (LocationManager)
+                    getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+            posicion = null;
+            if (ActivityCompat.checkSelfPermission(Mapas_Activity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Location location = locationManager.getLastKnownLocation(locationManager
+                        .getBestProvider(criteria, false));
+                if(location!=null){
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    posicion = new LatLng(latitude,longitude);
+                }
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(posicion!=null){
+                //Buscar la localización
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
+                mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));
+                animateCamera();
+            }else{
+                //Dialogo
+                mostrarDialogoReinicio();
+            }
+            pd.dismiss();
+        }
+    }
+
+    //Dialogo Reinicio
+    private void mostrarDialogoReinicio(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_message)
+                .setTitle(R.string.dialog_title);
+        builder.setPositiveButton(R.string.dialog_reset, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                new LocalizacionTask().execute();
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                finish();
+            }
+        });
+        builder.show();
+    }
+
 }
