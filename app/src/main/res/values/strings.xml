@@ -4,7 +4,7 @@
     <string name="title_activity_mapas">Map</string>
     <string name="dialog_reset">Volver a intentar</string>
     <string name="dialog_cancel">Salir</string>
-    <string name="dialog_message">No se ha podido acceder a la localización</string>
+    <string name="dialog_message">No se ha podido acceder a la localización. ¿Tiene el GPS activado?</string>
     <string name="dialog_title">Localización</string>
     <string name="pd_message">Cargando...</string>
 </resources>

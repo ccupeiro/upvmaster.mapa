@@ -3,6 +3,7 @@
     package="com.upvmaster.carlos.mapas">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-feature android:name="android.hardware.location.gps" />
