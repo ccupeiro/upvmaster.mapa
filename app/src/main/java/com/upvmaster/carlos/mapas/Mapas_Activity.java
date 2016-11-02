@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.upvmaster.carlos.mapas.R.id.mapa;
@@ -36,14 +37,17 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
     private View vista;
     private GoogleMap mMap;
     private double latitude,longitude;
+    private Boolean cargando;
     private final LatLng MADRID = new LatLng(39.481106, -0.340987);
     protected LocationManager locationManager;
     private String provider;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
+        cargando = true;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(mapa);
@@ -56,14 +60,12 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
                 Log.d("HOLA","HOLA");
             }
         });
-        iniciarGPS();
-
     }
 
     private void iniciarGPS(){
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
+            Toast.makeText(getApplicationContext(),"Hay que buscar señal. Vamos a Esperar a movernos!!!",Toast.LENGTH_LONG ).show();
             //Que el GPS esté activo
             if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
@@ -71,11 +73,9 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
                 provider=locationManager.getBestProvider(cri,false);
                 if(provider!=null & !provider.equals("")){
                     Location location=locationManager.getLastKnownLocation(provider);
-                    locationManager.requestLocationUpdates(provider, 400, 1, this);
+                    locationManager.requestLocationUpdates(provider, 4000, 20, this);
                     if(location!=null){
                         onLocationChanged(location);
-                    }else{
-                        Toast.makeText(getApplicationContext(),"location not found",Toast.LENGTH_LONG ).show();
                     }
                 }else{
                     mostrarDialogoReinicio();
@@ -93,7 +93,8 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
     protected void onResume() {
         super.onResume();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(provider, 400, 1, this);
+            iniciarGPS();
+            //new CargandoTask().execute();
         }
 
     }
@@ -103,7 +104,8 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
     protected void onPause() {
         super.onPause();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.removeUpdates(this);
+            if(locationManager!=null)
+                locationManager.removeUpdates(this);
         }
 
     }
@@ -114,8 +116,8 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(false);
             mMap.getUiSettings().setCompassEnabled(true);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MADRID,15));
-            mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));
+            /*mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(MADRID,15));
+            mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));*/
         }
 
     }
@@ -125,10 +127,14 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         if(mMap!=null){
+            Toast.makeText(getApplicationContext(),"Nos Movemos",Toast.LENGTH_SHORT ).show();
             LatLng posicion = new LatLng(location.getLatitude(),location.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(posicion));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(posicion,15));
-            mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));
+            if(marker!=null){
+                marker.remove();
+            }
+            marker = mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target));
         }
     }
 
@@ -165,6 +171,42 @@ public class Mapas_Activity extends FragmentActivity implements OnMapReadyCallba
             }
         });
         builder.show();
+    }
+
+    private class CargandoTask extends AsyncTask<Void,Void,Void>{
+        ProgressDialog pd;
+        @Override
+        protected void onPreExecute() {
+            ProgressDialog pd = new ProgressDialog(vista.getContext());
+            pd.setMessage(getString(R.string.pd_message));
+            if(pd!=null){
+                pd.show();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while (cargando) {
+                Log.d("UBICACION", "Cargando Ubicación");
+                if (ContextCompat.checkSelfPermission(Mapas_Activity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Location location=locationManager.getLastKnownLocation(provider);
+                    if(location!=null){
+                        cargando=false;
+                        onLocationChanged(location);
+                    }
+                }else
+                    return null;
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(pd!=null){
+                pd.dismiss();
+            }
+        }
     }
 
 }
