@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Mapas</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_mapas">Map</string>
     <string name="dialog_reset">Volver a intentar</string>
     <string name="dialog_cancel">Salir</string>
     <string name="dialog_message">No se ha podido acceder a la localización. ¿Tiene el GPS activado?</string>
