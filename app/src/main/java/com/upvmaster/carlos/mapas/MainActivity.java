@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void lanzarMapas(View view) {
-        Intent i = new Intent(this, Mapas_Activity.class);
-        startActivity(i);
+        /*Intent i = new Intent(this, Mapas_Activity.class);
+        startActivity(i);*/
     }
 
     private void lanzarSms(View view) {
