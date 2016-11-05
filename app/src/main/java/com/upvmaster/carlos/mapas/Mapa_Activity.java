@@ -59,12 +59,10 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 Criteria cri = new Criteria();
-                cri.setAccuracy(Criteria.ACCURACY_FINE);
                 provider = locationManager.getBestProvider(cri, false);
                 if (provider != null & !provider.equals("")) {
                     locationListener = new MiLocationListener();
-                    //TODO hay que hacer los dos listener para ver que lanza
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                    locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
                 }
             }
         }
@@ -158,7 +156,6 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 finish();
             }
         });
-        builder.setCancelable(false);
         builder.show();
     }
 
@@ -225,7 +222,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if(resul){
                 if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     //Bucle para buscar
-                    if(pd!=null) pd.dismiss();
+                    pd.dismiss();
                     if(localizacion!=null) {
                         mapFragment.getMapAsync((OnMapReadyCallback) activity);
                     }else{
@@ -233,12 +230,12 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                     }
 
                 }else{
-                    if(pd!=null) pd.dismiss();
+                    pd.dismiss();
                     mostrarDialogoReinicio();
                 }
 
             }else{
-               if(pd!=null) pd.dismiss();
+                pd.dismiss();
                 mostrarDialogoReinicio();
             }
         }
