@@ -145,7 +145,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if(marker!=null){
                 marker.remove();
             }
-            marker = mMap.addMarker(new MarkerOptions().position(posicion));
+            marker = mMap.addMarker(new MarkerOptions().position(posicion).title("aaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaa"));
         }
     }
 

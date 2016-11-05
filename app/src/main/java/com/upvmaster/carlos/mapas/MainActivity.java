@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void lanzarSms(View view) {
-        Intent i = new Intent(this, SMS_Activity.class);
+        Intent i = new Intent(this, MusicOFF_Activity.class);
         startActivity(i);
     }
 
