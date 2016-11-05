@@ -51,6 +51,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Button arrancar = (Button) findViewById(R.id.boton_arrancar);
+        arrancar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startService(new Intent(MainActivity.this,
+                        ServicioMusica.class));
+            }
+        });
+        Button detener = (Button) findViewById(R.id.boton_detener);
+        detener.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                stopService(new Intent(MainActivity.this,
+                        ServicioMusica.class));
+            }
+        });
+
     }
 
     @Override
