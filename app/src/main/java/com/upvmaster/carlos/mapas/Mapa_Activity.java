@@ -43,7 +43,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
     private LocationManager locationManager;
-    private MiLocationListener locationListener;
+    private MiLocationListener networkListener,gpsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +58,16 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                Criteria cri = new Criteria();
-                provider = locationManager.getBestProvider(cri, false);
-                if (provider != null & !provider.equals("")) {
-                    locationListener = new MiLocationListener();
-                    locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+                networkListener = new MiLocationListener();
+                gpsListener = new MiLocationListener();
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gpsListener);
                 }
+                if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, networkListener);
+                }
+            }else{
+                mostrarDialogoReinicio();
             }
         }
     }
@@ -71,19 +75,25 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
-        new LocalizarTask().execute();
+        if(localizacion==null){
+            new LocalizarTask().execute();
+        }else{
+            moverCamara();
+        }
     }
 
     @Override
     protected void onPause() {
         if(locationManager!=null){
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.removeUpdates(locationListener);
+                locationManager.removeUpdates(gpsListener);
+                locationManager.removeUpdates(networkListener);
             }else{
                 locationManager = null;
             }
 
         }
+        localizacion=null;
         super.onPause();
     }
 
@@ -156,6 +166,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 finish();
             }
         });
+        builder.setCancelable(false);
         builder.show();
     }
 
@@ -163,7 +174,8 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
 
         @Override
         public void onLocationChanged(Location location) {
-            localizacion = location;
+            if(localizacion==null)
+                localizacion = location;
         }
 
         @Override
@@ -175,8 +187,6 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
         @Override
         public void onProviderDisabled(String provider) {}
     }
-
-
     private class LocalizarTask extends AsyncTask<Void, Void, Boolean>{
 
         ProgressDialog pd;
@@ -222,7 +232,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if(resul){
                 if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     //Bucle para buscar
-                    pd.dismiss();
+                    if(pd!=null) pd.dismiss();
                     if(localizacion!=null) {
                         mapFragment.getMapAsync((OnMapReadyCallback) activity);
                     }else{
@@ -230,12 +240,12 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                     }
 
                 }else{
-                    pd.dismiss();
+                    if(pd!=null) pd.dismiss();
                     mostrarDialogoReinicio();
                 }
 
             }else{
-                pd.dismiss();
+                if(pd!=null) pd.dismiss();
                 mostrarDialogoReinicio();
             }
         }
