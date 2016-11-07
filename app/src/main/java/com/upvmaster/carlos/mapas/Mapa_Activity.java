@@ -39,7 +39,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
     private View vista;
     private Location localizacion = null;
     private Marker marker;
-    private String provider;
+    private String message;
     private SupportMapFragment mapFragment;
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -53,6 +53,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(mapa);
         vista = findViewById(R.id.vista_mapa);
         activity = this;
+        message = getIntent().getExtras().getString(ReceptorSMS.MESSAGE_KEY);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -145,7 +146,15 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if(marker!=null){
                 marker.remove();
             }
-            marker = mMap.addMarker(new MarkerOptions().position(posicion).title("aaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaa"));
+            MarkerOptions opcionesMarcador=new MarkerOptions()
+                    .position(posicion);
+            if(message!=null){
+                opcionesMarcador.title("Mensaje").snippet(message);
+            }
+            marker = mMap.addMarker(opcionesMarcador);
+            if(message!=null){
+                marker.showInfoWindow();
+            }
         }
     }
 

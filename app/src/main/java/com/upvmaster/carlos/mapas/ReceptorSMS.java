@@ -17,7 +17,8 @@ import android.widget.Toast;
 
 public class ReceptorSMS extends BroadcastReceiver {
 
-    final SmsManager sms = SmsManager.getDefault();
+    public static final String MESSAGE_KEY="MensajeSMS";
+    private final SmsManager sms = SmsManager.getDefault();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -43,6 +44,7 @@ public class ReceptorSMS extends BroadcastReceiver {
                     if(phoneNumber.equals("555")){
                         //Arrancar el servicio Musica
                         Intent intent_musica = new Intent(context,ServicioMusica.class);
+                        intent.putExtra(MESSAGE_KEY,currentMessage.getDisplayMessageBody());
                         context.startService(intent_musica);
                     }
                 }

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -30,9 +31,14 @@ public class ServicioMusica extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        PendingIntent pIntentMapa = PendingIntent.getActivity( this, 0, new Intent(this, Mapa_Activity.class), 0);
-        PendingIntent pIntentMusicaOff = PendingIntent.getActivity( this, 0, new Intent(this, MusicOFF_Activity.class), 0);
 
+        //PendingIntents
+        Intent iMapa = new Intent(this, Mapa_Activity.class);
+            //Mensaje
+        Bundle args = intent.getExtras();
+        iMapa.putExtra(ReceptorSMS.MESSAGE_KEY,args.getString(ReceptorSMS.MESSAGE_KEY));
+        PendingIntent pIntentMapa = PendingIntent.getActivity( this, 0,iMapa , 0);
+        PendingIntent pIntentMusicaOff = PendingIntent.getActivity( this, 0, new Intent(this, MusicOFF_Activity.class), 0);
         NotificationCompat.Builder notific = new NotificationCompat.Builder(this)
                 .setContentTitle("Creando Servicio de Música")
                 .setSmallIcon(R.drawable.ic_music_player)
@@ -40,7 +46,7 @@ public class ServicioMusica extends Service {
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setDefaults(Notification.DEFAULT_LIGHTS);
-        notific.addAction(android.R.drawable.ic_menu_mylocation, "Call", pIntentMapa);
+        notific.addAction(android.R.drawable.ic_menu_mylocation, "MAPA", pIntentMapa);
         notific.setContentIntent(pIntentMusicaOff);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID_NOTIFICACION_CREAR, notific.build());
