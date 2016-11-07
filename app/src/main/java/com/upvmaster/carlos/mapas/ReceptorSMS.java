@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Carlos on 05/11/2016.
@@ -17,8 +15,7 @@ import android.widget.Toast;
 
 public class ReceptorSMS extends BroadcastReceiver {
 
-    public static final String MESSAGE_KEY="MensajeSMS";
-    private final SmsManager sms = SmsManager.getDefault();
+    public static final String MESSAGE_KEY="mensaje_sms";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,7 +41,7 @@ public class ReceptorSMS extends BroadcastReceiver {
                     if(phoneNumber.equals("555")){
                         //Arrancar el servicio Musica
                         Intent intent_musica = new Intent(context,ServicioMusica.class);
-                        intent.putExtra(MESSAGE_KEY,currentMessage.getDisplayMessageBody());
+                        intent_musica.putExtra(MESSAGE_KEY,currentMessage.getDisplayMessageBody().toString());
                         context.startService(intent_musica);
                     }
                 }

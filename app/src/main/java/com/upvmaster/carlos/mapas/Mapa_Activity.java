@@ -53,7 +53,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(mapa);
         vista = findViewById(R.id.vista_mapa);
         activity = this;
-        message = getIntent().getExtras().getString(ReceptorSMS.MESSAGE_KEY);
+        message = getIntent().getStringExtra(ReceptorSMS.MESSAGE_KEY);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

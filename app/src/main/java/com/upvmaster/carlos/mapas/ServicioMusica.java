@@ -35,8 +35,9 @@ public class ServicioMusica extends Service {
         //PendingIntents
         Intent iMapa = new Intent(this, Mapa_Activity.class);
             //Mensaje
-        Bundle args = intent.getExtras();
-        iMapa.putExtra(ReceptorSMS.MESSAGE_KEY,args.getString(ReceptorSMS.MESSAGE_KEY));
+        String message = intent.getStringExtra(ReceptorSMS.MESSAGE_KEY);
+        if(message!=null)
+            iMapa.putExtra(ReceptorSMS.MESSAGE_KEY,message);
         PendingIntent pIntentMapa = PendingIntent.getActivity( this, 0,iMapa , 0);
         PendingIntent pIntentMusicaOff = PendingIntent.getActivity( this, 0, new Intent(this, MusicOFF_Activity.class), 0);
         NotificationCompat.Builder notific = new NotificationCompat.Builder(this)
