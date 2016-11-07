@@ -1,4 +1,4 @@
-package com.upvmaster.carlos.mapas;
+package com.upvmaster.carlos.mapas.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -7,16 +7,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -27,6 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.upvmaster.carlos.mapas.R;
+import com.upvmaster.carlos.mapas.receivers.ReceptorSMS;
 
 import static com.upvmaster.carlos.mapas.R.id.mapa;
 

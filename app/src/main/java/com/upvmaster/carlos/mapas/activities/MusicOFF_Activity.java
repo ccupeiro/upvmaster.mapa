@@ -1,10 +1,13 @@
-package com.upvmaster.carlos.mapas;
+package com.upvmaster.carlos.mapas.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.upvmaster.carlos.mapas.R;
+import com.upvmaster.carlos.mapas.services.ServicioMusica;
 
 public class MusicOFF_Activity extends AppCompatActivity {
 
@@ -20,7 +23,7 @@ public class MusicOFF_Activity extends AppCompatActivity {
             }
         });
         Button mapa = (Button) findViewById(R.id.mapa_music);
-        detener.setOnClickListener(new View.OnClickListener() {
+        mapa.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent i = new Intent(MusicOFF_Activity.this, Mapa_Activity.class);
                 startActivity(i);

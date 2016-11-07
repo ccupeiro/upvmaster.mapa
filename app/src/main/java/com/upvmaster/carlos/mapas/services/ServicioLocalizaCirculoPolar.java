@@ -1,6 +1,5 @@
-package com.upvmaster.carlos.mapas;
+package com.upvmaster.carlos.mapas.services;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,13 +12,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.view.View;
 import android.widget.Toast;
+
+import com.upvmaster.carlos.mapas.activities.Mapa_Activity;
 
 /**
  * Created by Carlos on 07/11/2016.

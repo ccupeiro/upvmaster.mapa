@@ -1,9 +1,11 @@
-package com.upvmaster.carlos.mapas;
+package com.upvmaster.carlos.mapas.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.upvmaster.carlos.mapas.services.ServicioLocalizaCirculoPolar;
 
 /**
  * Created by Carlos on 07/11/2016.

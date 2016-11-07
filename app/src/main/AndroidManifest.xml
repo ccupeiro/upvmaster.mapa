@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.upvmaster.carlos.mapas">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-feature android:name="android.hardware.location.gps" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,18 +11,18 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <receiver android:name="ReceptorSMS" >
+        <receiver android:name=".receivers.ReceptorSMS" >
             <intent-filter >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.upvmaster.carlos.mapas.ReceptorArranque" >
+        <receiver android:name="com.upvmaster.carlos.mapas.receivers.ReceptorArranque" >
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <activity
-            android:name=".Mapa_Activity"
+            android:name=".activities.Mapa_Activity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,19 +30,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MusicOFF_Activity" />
-<!--        <activity android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
-        <service android:name=".ServicioMusica" />
-        <service android:name=".ServicioLocalizaCirculoPolar" />
+        <activity android:name=".activities.MusicOFF_Activity" />
+        <service android:name=".services.ServicioMusica" />
+        <service android:name=".services.ServicioLocalizaCirculoPolar" />
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name = "android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-feature android:name="android.hardware.location.gps" />
 
 </manifest>

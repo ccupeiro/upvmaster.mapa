@@ -1,4 +1,4 @@
-package com.upvmaster.carlos.mapas;
+package com.upvmaster.carlos.mapas.services;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,12 +7,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
+
+import com.upvmaster.carlos.mapas.R;
+import com.upvmaster.carlos.mapas.activities.Mapa_Activity;
+import com.upvmaster.carlos.mapas.activities.MusicOFF_Activity;
+import com.upvmaster.carlos.mapas.receivers.ReceptorSMS;
 
 /**
  * Created by Carlos on 05/11/2016.
