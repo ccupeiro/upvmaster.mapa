@@ -6,4 +6,17 @@
     <string name="dialog_message">No se ha podido acceder a la localización. ¿Tiene el GPS activado?</string>
     <string name="dialog_title">Localización</string>
     <string name="pd_message">Cargando...</string>
+    <string name="serviciomusica.notificacion.title">Creando Servicio de Música</string>
+    <string name="serviciomusica.notificacion.text">Pulsa para poder Quitar la música</string>
+    <string name="serviciomusica.notificacion.action.text">MAPA</string>
+    <string name="serviciopolar.toast.fallo.ubicacion">No se puede cargar la ubicación</string>
+    <string name="serviciopolar.toast.fallo.permisos">Se necesitan permisos para la aplicación Mapas</string>
+    <string name="serviciopolar.notificacion.title">Creando Servicio de Circulo Polar ártico</string>
+    <string name="serviciopolar.notificacion.texto">Pulse para ir a ver el Mapa</string>
+    <string name="mapa.progressdialog.text">Cargando la ubicación...</string>
+    <string name="mapa.marcador.mensaje.title">Mensaje</string>
+    <string name="mapa.fallo.permiso">Sin el permiso, no puedo realizar la acción</string>
+    <string name="mapa.snackbar.text">Sin el permiso de acceso al GPS la aplicación no puede funcionar.</string>
+    <string name="btn_apagar_musica">APAGAR MÚSICA</string>
+    <string name="btn_localizacion">IR A MI LOCALIZACIÓN</string>
 </resources>

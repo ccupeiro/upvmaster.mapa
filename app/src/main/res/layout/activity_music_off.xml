@@ -15,7 +15,7 @@
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:text="APAGAR MÚSICA"/>
+        android:text="@string/btn_apagar_musica"/>
     <Button
         android:id="@+id/mapa_music"
         android:layout_width="wrap_content"
@@ -23,6 +23,6 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:text="IR A MI LOCALIZACIÓN"/>
+        android:text="@string/btn_localizacion"/>
 
 </LinearLayout>

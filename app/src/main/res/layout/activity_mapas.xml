@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:id="@+id/vista_mapa"
     android:layout_height="match_parent"
-    tools:context=".Mapas_Activity">
+    tools:context=".activities.Mapa_Activity">
     <fragment android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

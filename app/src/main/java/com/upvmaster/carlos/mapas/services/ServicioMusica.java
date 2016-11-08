@@ -43,13 +43,17 @@ public class ServicioMusica extends Service {
         PendingIntent pIntentMapa = PendingIntent.getActivity( this, 0,iMapa , 0);
         PendingIntent pIntentMusicaOff = PendingIntent.getActivity( this, 0, new Intent(this, MusicOFF_Activity.class), 0);
         NotificationCompat.Builder notific = new NotificationCompat.Builder(this)
-                .setContentTitle("Creando Servicio de Música")
+                .setContentTitle(getString(R.string.serviciomusica_notificacion_title))
                 .setSmallIcon(R.drawable.ic_music_player)
-                .setContentText("Pulsa para poder Quitar la música")
+                .setContentText(getString(R.string.serviciomusica_notificacion_text))
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setDefaults(Notification.DEFAULT_LIGHTS);
-        notific.addAction(android.R.drawable.ic_menu_mylocation, "MAPA", pIntentMapa);
+        NotificationCompat.Action action = new NotificationCompat.Action.Builder(
+                                                    R.drawable.ic_location,
+                                                    getString(R.string.serviciomusica_notificacion_action_text), pIntentMapa)
+                                                    .build();
+        notific.addAction(action);
         notific.setContentIntent(pIntentMusicaOff);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID_NOTIFICACION_CREAR, notific.build());

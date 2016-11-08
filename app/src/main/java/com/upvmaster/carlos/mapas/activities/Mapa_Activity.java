@@ -3,6 +3,7 @@ package com.upvmaster.carlos.mapas.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.upvmaster.carlos.mapas.R;
 import com.upvmaster.carlos.mapas.receivers.ReceptorSMS;
+import com.upvmaster.carlos.mapas.services.ServicioLocalizaCirculoPolar;
 
 import static com.upvmaster.carlos.mapas.R.id.mapa;
 
@@ -52,6 +54,9 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(mapa);
         vista = findViewById(R.id.vista_mapa);
         activity = this;
+        //Cancelar la notificacion Polar
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(ServicioLocalizaCirculoPolar.ID_NOTIFICACION_POLAR);
         message = getIntent().getStringExtra(ReceptorSMS.MESSAGE_KEY);
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -99,7 +104,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
 
     void solicitarPermisoGPS() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Snackbar.make (activity.getCurrentFocus(), "Sin el permiso de acceso al GPS la aplicación no puede funcionar.", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+            Snackbar.make (activity.getCurrentFocus(), getString(R.string.mapa_snackbar_text), Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ActivityCompat.requestPermissions(Mapa_Activity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SOLICITUD_PERMISO_GPS);
@@ -116,7 +121,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //iniciarGPS();
                 } else {
-                    Snackbar.make(vista, "Sin el permiso, no puedo realizar la acción", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(vista, R.string.mapa_fallo_permiso, Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -148,7 +153,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             MarkerOptions opcionesMarcador=new MarkerOptions()
                     .position(posicion);
             if(message!=null){
-                opcionesMarcador.title("Mensaje").snippet(message);
+                opcionesMarcador.title(getString(R.string.mapa_marcador_mensaje_title)).snippet(message);
             }
             marker = mMap.addMarker(opcionesMarcador);
             if(message!=null){
@@ -206,7 +211,7 @@ public class Mapa_Activity extends FragmentActivity implements OnMapReadyCallbac
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 pd = new ProgressDialog(activity);
                 pd.setCancelable(false);
-                pd.setMessage("Cargando la ubicación...");
+                pd.setMessage(getString(R.string.mapa_progressdialog_text));
                 pd.show();
             }else{
                 cancel(true);

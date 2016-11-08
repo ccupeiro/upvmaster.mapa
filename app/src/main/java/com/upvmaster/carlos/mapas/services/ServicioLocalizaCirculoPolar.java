@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.upvmaster.carlos.mapas.R;
 import com.upvmaster.carlos.mapas.activities.Mapa_Activity;
 
 /**
@@ -25,7 +26,7 @@ import com.upvmaster.carlos.mapas.activities.Mapa_Activity;
 public class ServicioLocalizaCirculoPolar extends Service {
 
     private final static double LATITUD_CIRCULO_POLAR = 66.55f;
-    private static final int ID_NOTIFICACION_CREAR = 2;
+    public static final int ID_NOTIFICACION_POLAR = 2;
     private Context context;
     private LocationManager locationManager;
     private MiLocationListener listener;
@@ -36,17 +37,16 @@ public class ServicioLocalizaCirculoPolar extends Service {
         context = this;
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 listener = new MiLocationListener();
                 if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
                 }
             }else{
-                Toast.makeText(getApplicationContext(),"No se puede cargar la ubicación",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.serviciopolar_toast_fallo_ubicacion,Toast.LENGTH_LONG).show();
             }
         }else{
-            Toast.makeText(getApplicationContext(),"Se necesitan permisos para la aplicación Mapas",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.serviciopolar_toast_fallo_permisos,Toast.LENGTH_LONG).show();
         }
     }
 
@@ -78,15 +78,15 @@ public class ServicioLocalizaCirculoPolar extends Service {
                 PendingIntent pIntentMapa = PendingIntent.getActivity( context, 0,new Intent(context, Mapa_Activity.class) , 0);
                 //Notificacion
                 NotificationCompat.Builder notific = new NotificationCompat.Builder(context)
-                        .setContentTitle("Creando Servicio de Circulo Polar ártico")
+                        .setContentTitle(getString(R.string.serviciopolar_notificacion_title))
                         .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                        .setContentText("Ppulse para ir a ver el Mapa")
+                        .setContentText(getString(R.string.serviciopolar_notificacion_texto))
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setDefaults(Notification.DEFAULT_VIBRATE)
                         .setDefaults(Notification.DEFAULT_LIGHTS);
                 notific.setContentIntent(pIntentMapa);
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(ID_NOTIFICACION_CREAR, notific.build());
+                notificationManager.notify(ID_NOTIFICACION_POLAR, notific.build());
             }
         }
 
